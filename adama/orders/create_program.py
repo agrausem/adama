@@ -17,9 +17,8 @@ class Order(BaseOrder):
     help = __doc__
     args = "project_path name"
 
-    def __init__(self, commander, order):
+    def __init__(self, commander):
         super(Order, self).__init__(commander)
-        self.order = order
 
     def _lines(self):
         lines = []

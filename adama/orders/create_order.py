@@ -19,9 +19,8 @@ class Order(BaseOrder):
     help = __doc__
     args = "project_path library_name order_name"
 
-    def __init__(self, commander, order):
+    def __init__(self, commander):
         super(Order, self).__init__(commander)
-        self.order = order
 
     def _lines(self):
         lines = []
@@ -40,9 +39,8 @@ class Order(BaseOrder):
         lines.append('    help = \'help for the order (ex: __doc__)\'\n')
         lines.append('    args = \'args of the order (ex: [options] arg1 arg2 \'\n')
         lines.append('\n')
-        lines.append('    def __init__(self, commander, order):\n')
+        lines.append('    def __init__(self, commander):\n')
         lines.append('        super(Order, self).__init__(commander)\n')
-        lines.append('        self.order = order\n')
         lines.append('\n')
         lines.append('    def run(self, *args, **options):\n')
         lines.append('        # the logic of the order comes here\n')

@@ -19,36 +19,37 @@ class BaseOrder(object):
 
     def __init__(self, commander):
         self.commander = commander
+        self.order_name = self.__class__.__module__.split('.')[-1]
 
-    def usage(self, order_name):
+    def usage(self):
         """Usage of a command
         """
-        usage = '%prog {0} [options] {1}'.format(order_name, self.args)
+        usage = '%prog {0} [options] {1}'.format(self.order_name, self.args)
         if self.help:
             return '{0}\n\n{1}'.format(usage, self.help)
         else:
             return usage
 
-    def get_parser(self, order_name):
+    def get_parser(self):
         """Initialize the option and argument parser for
         a command
         """
         return OptionParser(prog=self.commander,
-            usage=self.usage(order_name),
+            usage=self.usage(),
             option_list=self.options
         )
 
-    def get_help(self, order_name):
+    def get_help(self):
         """Prints the help of a command
         """
-        parser = self.get_parser(order_name)
+        parser = self.get_parser()
         parser.print_help()
 
-    def parse_args(self, args):
-        """Parse the command args ans options as defined in the
+    def parse_args(self):
+        """Parse the command args and options as defined in the
         subclass implementation of the command
         """
-        parser = self.get_parser(args[0])
+        parser = self.get_parser()
         return parser.parse_args()
 
     def run(self):
@@ -59,7 +60,7 @@ class BaseOrder(object):
     def __call__(self, args):
         """Executes the command with args given
         """
-        options, args = self.parse_args(args)
+        options, args = self.parse_args()
         try:
             result = self.run(*args, **options.__dict__)
         except OrderError, e:

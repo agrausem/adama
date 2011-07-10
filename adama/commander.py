@@ -38,7 +38,7 @@ def get_orders(commander):
             subpackage = '{0}.{1}'.format(app_orders, name)
             if subpackage not in sys.modules:
                 __import__(subpackage)
-            _orders[name] = sys.modules[subpackage]
+            _orders[name] = sys.modules[subpackage].Order(commander)
     return _orders
 
 
@@ -46,7 +46,7 @@ def execute_order(commander, name, *args, **options):
     """
     """
     try:
-        order = get_orders(commander)[name].Order(commander, name)
+        order = get_orders(commander)[name]
     except KeyError:
         raise OrderError, "Unknow order: {0}".format(name)
 
@@ -78,24 +78,23 @@ def sir_yes_sir(argv=None):
     argv = argv if argv else sys.argv[:]
     commander = os.path.basename(argv[0])
 
-    if len(argv) == 1:
+    no_arg = len(argv) == 1
+    needs_help = not no_arg and argv[1] == 'help'
+    global_help = needs_help and len(argv) == 2
+    order_help = needs_help and len(argv) > 2
+
+    if no_arg or global_help:
         main_help(commander)
         return 0
-
-    order = argv[1]
-
-    if order == 'help':
-        if len(argv) > 2:
-            order = BaseOrder(commander)
-            order.get_help(argv[2])
-        else:
-            main_help(commander)
-        return 0
-
-    try:
-        order = get_orders(commander)[order].Order(commander, order)
-    except OrderError as e:
-        pass
     else:
-        return order(argv[1:])
-
+        order_name = argv[1] if not order_help else argv[2]
+        try:
+            order = get_orders(commander)[order_name]
+        except OrderError as e:
+            pass
+        else:
+            if order_help:
+                order.get_help()
+                return 0
+            else:
+                return order(argv[1:])
