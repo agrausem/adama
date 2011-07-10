@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+
+"""
+"""
+
+from adama.commander import BaseOrder, OrderError
+
+
+class Order(BaseOrder):
+    """
+    """
+
+    options = BaseOrder.options
+        # options for order come here
+
+    help = 'help for the order (ex: __doc__)'
+    args = 'args of the order (ex: [options] arg1 arg2'
+
+    def __init__(self, commander):
+        super(Order, self).__init__(commander)
+
+    def run(self, *args, **options):
+        # the logic of the order comes here
+        return 0

@@ -9,6 +9,7 @@ import os
 from optparse import make_option
 
 from adama import BaseOrder, OrderError
+from adama.orders import get_template
 
 class Order(BaseOrder):
 
@@ -19,19 +20,6 @@ class Order(BaseOrder):
 
     def __init__(self, commander):
         super(Order, self).__init__(commander)
-
-    def _lines(self):
-        lines = []
-        lines.append('#!/usr/bin/env python\n')
-        lines.append('# -*- coding: utf-8 -*-\n')
-        lines.append('\n')
-        lines.append('import sys\n')
-        lines.append('from adama.commander import sir_yes_sir\n')
-        lines.append('\n')
-        lines.append("if __name__ == '__main__':\n")
-        lines.append("    sys.exit(sir_yes_sir())\n")
-        return lines
-
 
     def run(self, *args, **options):
         if len(args) != 3:
@@ -52,6 +40,6 @@ class Order(BaseOrder):
         script_path = os.path.join(bin_path, prog_name)
 
         with open(script_path, "w") as program:
-            program.writelines(self._lines())
+            program.write(get_template('program'))
 
         return 0

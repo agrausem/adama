@@ -8,7 +8,7 @@ import os
 from optparse import make_option
 
 from adama import BaseOrder, OrderError
-
+from adama.orders import get_template
 
 class Order(BaseOrder):
     """
@@ -21,31 +21,6 @@ class Order(BaseOrder):
 
     def __init__(self, commander):
         super(Order, self).__init__(commander)
-
-    def _lines(self):
-        lines = []
-        lines.append('# -*- coding: utf-8 -*-\n')
-        lines.append('\n')
-        lines.append('from adama.commander import BaseOrder, OrderError\n')
-        lines.append('\n\n')
-        lines.append('class Order(BaseOrder):\n')
-        lines.append('    """\n')
-        lines.append('    """\n')
-        lines.append('\n')
-        lines.append('    options = BaseOrder.options + (\n')
-        lines.append('        # options for order come here\n')
-        lines.append('    )\n')
-        lines.append('\n')
-        lines.append('    help = \'help for the order (ex: __doc__)\'\n')
-        lines.append('    args = \'args of the order (ex: [options] arg1 arg2 \'\n')
-        lines.append('\n')
-        lines.append('    def __init__(self, commander):\n')
-        lines.append('        super(Order, self).__init__(commander)\n')
-        lines.append('\n')
-        lines.append('    def run(self, *args, **options):\n')
-        lines.append('        # the logic of the order comes here\n')
-        lines.append('        return 0\n')
-        return lines
 
     def run(self, *args, **options):
         if len(args) != 4:
@@ -69,6 +44,6 @@ class Order(BaseOrder):
         order_path = os.path.join(orders_path, order_name)
 
         with open(order_path, "w") as order:
-            order.writelines(self._lines())
+            order.write(get_template('order'))
 
         return 0
