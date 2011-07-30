@@ -62,12 +62,19 @@ def execute_order(commander, name, *args, **options):
 def main_help(commander):
     """
     """
-    helper = "Usage of commander {0}:\n".format(commander)
-    helper += '{0} order [options] args\n'.format(commander)
+    options = BaseOrder(commander).options
+    orders = get_orders(commander)
+
+    helper = "Commander {0} help\n".format(commander)
+    helper += 'usage: {0} order [options] [args]\n'.format(commander)
     helper += '\n'
+    if options:
+        helper += 'Options:\n'
+        helper += '\n'.join(option for option in options)
+    helper += "Type '{0} help <order>' for help on a specific order\n\n"\
+        .format(commander)
     helper += "Available orders :\n"
-    helper += 'help\n'
-    helper += '\n'.join(order for order in get_orders(commander))
+    helper += '\n'.join('  {0}'.format(order) for order in orders)
     helper += '\n\n'
 
     sys.stdout.write(helper)
