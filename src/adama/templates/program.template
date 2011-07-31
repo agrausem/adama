@@ -5,4 +5,4 @@ import sys
 from adama import sir_yes_sir
 
 if __name__ == '__main__':
-    sys.exit(sir_yes_sir())
+    sys.exit(sir_yes_sir('{0}'))

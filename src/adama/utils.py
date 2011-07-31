@@ -12,9 +12,14 @@ class AdamaOptionParser(OptionParser):
     """
 
     def format_epilog(self, formatter):
-        """Initial format_epilog function stris newline
+        """Initial format_epilog function strips newline
         """
         return self.epilog
+
+    def format_description(self, formatter):
+        """Initial format_description function strips newline
+        """
+        return self.description
 
 
 VERSION = '0.2'

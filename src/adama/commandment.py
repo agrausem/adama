@@ -17,7 +17,6 @@ class QG(object):
     """
 
     arg = ''
-    help = ''
     options = ()
 
     def __init__(self, command, module):
@@ -58,7 +57,7 @@ class QG(object):
         """
         options, args = self.decrypt()
         try:
-            result = self.run(*args, **options.__dict__)
+            result = self.run(args, options)
         except OrderError, e:
             sys.stderr.write(str(e))
             sys.exit(1)
@@ -114,7 +113,7 @@ Available orders:
     def __getitem__(self, key):
         return self.get_order(key)
 
-    def run(self, *args, **kwargs):
+    def run(self, args, options):
         """Bad use of command so we print usage
         """
         return self.explanations()
@@ -126,8 +125,8 @@ class BaseOrder(QG):
     """
 
     args = ''
-    help = ''
     options = ()
+    examples = ""
 
     def __init__(self, command, module):
         super(BaseOrder, self).__init__(command, module)
@@ -137,3 +136,9 @@ class BaseOrder(QG):
         """Usage of a command
         """
         return '%prog {0.name} [options] {0.args}'.format(self)
+
+    @property
+    def decrypter(self):
+        decrypter = super(BaseOrder, self).decrypter
+        decrypter.epilog = self.examples
+        return decrypter

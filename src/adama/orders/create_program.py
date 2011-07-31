@@ -12,34 +12,47 @@ from adama.commandment import BaseOrder, OrderError
 from adama.orders import get_template
 
 class Order(BaseOrder):
+    """Creates a program script that can launch orders from a python module
 
-    options = BaseOrder.options
+Argument:
+  module      Python module that contains or will contain the orders module
+    """
 
-    help = __doc__
-    args = "project_path name"
+    options = BaseOrder.options + (
+        make_option('-d', '--directory', action='store', type='string',
+            dest='path', metavar='PATH', default=os.getcwd(),
+            help='directory to save the command [Default: %default]'),
+        make_option('-n', '--name', action='store', type='string', dest='name',
+            metavar='NAME', help='name of the command [Default: module\'s name]'),
+    )
+
+    args = "module"
+    examples = ""
 
     def __init__(self, commander, module):
         super(Order, self).__init__(commander, module)
 
-    def run(self, *args, **options):
-        if len(args) != 3:
-            raise OrderError('The create_program needs two arguments')
+    def run(self, args, options):
+        if len(args) != 2:
+            raise OrderError('The create_program has one required argument',
+                self.usage())
 
-        project_path = args[1]
-        prog_name = args[2]
+        module = args[1]
 
-        if not os.path.isdir(project_path):
-            raise OrderError(
-                'The project {0} does not exist'.format(project_path)
-            )
+        # Checks if entered path exists and create it
+        if not os.path.isdir(options.path):
+            os.makedirs(options.path)
 
-        bin_path = os.path.join(project_path, 'bin')
-        if not os.path.isdir(bin_path):
-            os.mkdir(bin_path)
+        # Defines command's name if user doesn't
+        if not options.name:
+            options.name = module.split('.')[-1]
 
-        script_path = os.path.join(bin_path, prog_name)
+        # Path to save the command
+        file_path = os.path.join(options.path, options.name)
 
-        with open(script_path, "w") as program:
-            program.write(get_template('program'))
+        # Writes data coming from template to file
+        with open(file_path, "w") as program:
+            template = get_template('program')
+            program.write(template.format(module))
 
         return 0
