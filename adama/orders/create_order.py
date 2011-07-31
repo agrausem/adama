@@ -7,7 +7,7 @@ all the data for generating playlist
 import os
 from optparse import make_option
 
-from adama import BaseOrder, OrderError
+from adama.commandment import BaseOrder, OrderError
 from adama.orders import get_template
 
 class Order(BaseOrder):
@@ -19,8 +19,8 @@ class Order(BaseOrder):
     help = __doc__
     args = "project_path library_name order_name"
 
-    def __init__(self, commander):
-        super(Order, self).__init__(commander)
+    def __init__(self, commander, module):
+        super(Order, self).__init__(commander, module)
 
     def run(self, *args, **options):
         if len(args) != 4:

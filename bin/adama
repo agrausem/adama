@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from adama.commander import sir_yes_sir
+from adama import sir_yes_sir
 
 if __name__ == '__main__':
 	sys.exit(sir_yes_sir())
