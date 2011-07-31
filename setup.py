@@ -1,19 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from distutils.core import setup
+from setuptools import setup, find_packages
+
+version = '0.2'
 
 # Dynamically calculate the version based on playlister VERSION.
 
 setup(
     name = "adama",
-    version = "0.1",
-    url = 'http://bitbucket.org/agrausem/commander',
-    download_url = 'http://bitbucket.org/agrausem/commander/files/',
+    version = version,
+    url = 'http://bitbucket.org/agrausem/adama',
+    download_url = 'http://bitbucket.org/agrausem/adama/files/',
     author = 'Arnaud Grausem',
     author_email = 'arnaud.grausem@gmail.com',
     description = 'A light library to create command line python script for an application',
-    packages = ['adama', 'adama.orders'],
+    packages = find_packages('src'),
+    package_dir = {'': 'src'},
+    package_data = {
+            'adama': [
+                'templates/*.template'
+            ]
+    },
+    scripts = ['bin/adama'],
     classifiers = ['Development Status :: 3 - Alpha',
                    'Environment :: Console',
                    'Intended Audience :: Developers',
