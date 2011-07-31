@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""This script allows you to adding data to the listen file that contains
-all the data for generating playlist
+"""Create Program Order
 """
 
 import sys
@@ -12,7 +11,7 @@ from adama.commandment import BaseOrder, OrderError
 from adama.orders import get_template
 
 class Order(BaseOrder):
-    """Creates a program script that can launch orders from a python module
+    """Creates a command line program for your application that will look for orders
 
 Argument:
   module      Python module that contains or will contain the orders module
@@ -27,6 +26,7 @@ Argument:
     )
 
     args = "module"
+    description = __doc__.split('\n')[0].lower()
     examples = ""
 
     def __init__(self, commander, module):

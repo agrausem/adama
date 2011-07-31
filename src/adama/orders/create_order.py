@@ -16,7 +16,7 @@ class Order(BaseOrder):
 
     options = BaseOrder.options
 
-    help = __doc__
+    description = __doc__
     args = "project_path library_name order_name"
 
     def __init__(self, commander, module):

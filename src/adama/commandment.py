@@ -101,7 +101,8 @@ Available orders:
 
 """
         decrypter.epilog = epilog.format(self.command,
-            '\n'.join('  {0}'.format(order) for order in self.orders)
+            '\n'.join('  {0}\t{1}'.format(name, order.description)
+            for name, order in self.orders.items())
         )
         return decrypter
 
