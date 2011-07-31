@@ -23,8 +23,7 @@ def sir_yes_sir(module='', argv=None):
     order_help = needs_help and len(argv) > 2
 
     if no_arg or global_help:
-        commander.explanations()
-        return 0
+        return commander.explanations()
     else:
         order_name = argv[1] if not order_help else argv[2]
         try:
@@ -33,7 +32,6 @@ def sir_yes_sir(module='', argv=None):
             return commander(argv[1:])
         else:
             if order_help:
-                order.explanations()
-                return 0
+                return order.explanations()
             else:
                 return order(argv[1:])

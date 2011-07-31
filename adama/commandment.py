@@ -41,6 +41,7 @@ class QG(object):
         """Help on command
         """
         self.decrypter.print_help()
+        return 1
 
     def decrypt(self):
         """Parse command args and options
@@ -116,8 +117,7 @@ Available orders:
     def run(self, *args, **kwargs):
         """Bad use of command so we print usage
         """
-        self.explanations()
-        return 0
+        return self.explanations()
 
 
 class BaseOrder(QG):
