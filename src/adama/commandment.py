@@ -79,23 +79,35 @@ class Commander(QG):
         """Lists the available orders
         """
         app_orders = '{0}.orders'.format(self.module)
-        package = __import__(app_orders) if app_orders not in sys.modules \
-            else sys.modules[app_orders]
-
-        if not self.__orders:
-            for name in find_orders(package.__path__[0]):
-                subpackage = '{0}.{1}'.format(app_orders, name)
-                if subpackage not in sys.modules:
-                    __import__(subpackage)
-                self.__orders[name] = sys.modules[subpackage].Order(
-                    self.command, self.module)
+        try:
+            package = __import__(app_orders) if app_orders not in sys.modules \
+                else sys.modules[app_orders]
+        except ImportError as e:
+            print('The "orders" module can not be found under the {0} package'\
+                .format(self.module))
+        else:
+            if not self.__orders:
+                print package
+                for name in find_orders(package.__path__[0]):
+                    subpackage = '{0}.{1}'.format(app_orders, name)
+                    if subpackage not in sys.modules:
+                        __import__(subpackage)
+                    self.__orders[name] = sys.modules[subpackage].Order(
+                        self.command, self.module)
 
         return self.__orders
 
     @property
     def decrypter(self):
+        """Adds epilog and doc informations to the command option parser
+        """
         decrypter = super(Commander, self).decrypter
+
+        # Adds doc to description of option parser
         decrypter.description = self.doc
+
+        # Adds available orders or help creating orders to the epilog of option
+        # parser
         epilog = """
 Type '{0} help <order>' for help on a specific order.
 
@@ -103,10 +115,19 @@ Available orders:
 {1}
 
 """
-        decrypter.epilog = epilog.format(self.command,
-            '\n'.join('  {0}\t{1}'.format(name, order.description)
+        # Pretty output of available orders
+        pretty_orders = '\n'.join('  {0}\t{1}'.format(name, order.description)
             for name, order in self.orders.items())
+        # Help output when no orders can be found under package
+        no_orders = """
+No orders available.
+Type 'adama create_order [options] {0} <order_name>' to create one"""\
+            .format(self.module)
+        # Formats the epilog
+        decrypter.epilog = epilog.format(
+            self.command, pretty_orders if pretty_orders else no_orders
         )
+
         return decrypter
 
     def get_order(self, name):
