@@ -55,7 +55,6 @@ Arguments:
 
         # Writes in file
         with open(order_path, "w") as order:
-            template = get_template('order')
             order.write(get_template('order'))
 
         return 0
