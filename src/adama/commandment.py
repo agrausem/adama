@@ -115,18 +115,21 @@ Available orders:
 {1}
 
 """
-        # Pretty output of available orders
-        pretty_orders = '\n'.join('  {0}\t{1}'.format(name, order.description)
-            for name, order in self.orders.items())
-        # Help output when no orders can be found under package
-        no_orders = """
+        if self.orders:
+            # Returns the longest line length that will be printed on terminal
+            max_ordername_len = max((len(name) for name in self.orders))
+            # Pretty output of available orders
+            available_orders = '\n'.join(
+                '  {0:{2}}\t{1}'.format(name, order.description, max_ordername_len)
+                for name, order in self.orders.items())
+        else:
+            # Help output when no orders can be found under package
+            available_orders = """
 No orders available.
 Type 'adama create_order [options] {0} <order_name>' to create one"""\
-            .format(self.module)
+                .format(self.module)
         # Formats the epilog
-        decrypter.epilog = epilog.format(
-            self.command, pretty_orders if pretty_orders else no_orders
-        )
+        decrypter.epilog = epilog.format(self.command, available_orders)
 
         return decrypter
 

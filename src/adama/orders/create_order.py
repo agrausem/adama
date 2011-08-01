@@ -11,8 +11,7 @@ from adama.orders import get_template, add_to_pythonpath
 
 
 class Order(BaseOrder):
-    """Creates an order for your application that will be launch with a command
-as a subcommand
+    """Creates an order for your application that will be launch with a command as a subcommand
 
 Arguments:
   module    python module that contains or will contain the orders module
