@@ -9,13 +9,13 @@ import os
 from .commandment import Commander, OrderError
 
 
-def sir_yes_sir(module='', argv=None):
+def sir_yes_sir(module='', doc='', argv=None):
     """
     """
     argv = argv if argv else sys.argv[:]
     command = os.path.basename(argv[0])
     module = module if module else command
-    commander = Commander(command, module)
+    commander = Commander(command, module, doc)
 
     no_arg = len(argv) == 1
     needs_help = not no_arg and argv[1] == 'help'

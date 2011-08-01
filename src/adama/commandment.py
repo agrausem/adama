@@ -69,8 +69,9 @@ class Commander(QG):
 
     __orders = {}
 
-    def __init__(self, command, module):
+    def __init__(self, command, module, doc):
         super(Commander, self).__init__(command, module)
+        self.doc = doc if doc else __doc__
 
     @property
     def orders(self):
@@ -93,6 +94,7 @@ class Commander(QG):
     @property
     def decrypter(self):
         decrypter = super(Commander, self).decrypter
+        decrypter.description = self.doc
         epilog = """
 Type '{0} help <order>' for help on a specific order.
 

@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""Adama main command to create commands and orders for your applications
+"""
+
 import sys
 from adama import sir_yes_sir
 
+
 if __name__ == '__main__':
-	sys.exit(sir_yes_sir())
+	sys.exit(sir_yes_sir(doc=__doc__))
