@@ -26,7 +26,7 @@ Arguments:
     def __init__(self, commander, module):
         super(Order, self).__init__(commander, module)
 
-    def run(self, args, options):
+    def execute(self, args, options):
         if len(args) != 3:
             raise OrderError('The create_program has 3 required arguments', self.usage())
 

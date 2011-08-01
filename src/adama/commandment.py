@@ -47,7 +47,7 @@ class QG(object):
         """
         return self.decrypter.parse_args()
 
-    def run(self, *args, **kwargs):
+    def execute(self, *args, **kwargs):
         """The implementation of the command or order comes here
         """
         raise NotImplementedError()
@@ -57,7 +57,7 @@ class QG(object):
         """
         options, args = self.decrypt()
         try:
-            result = self.run(args, options)
+            result = self.execute(args, options)
         except OrderError, e:
             sys.stderr.write(str(e))
             sys.exit(1)
@@ -114,7 +114,7 @@ Available orders:
     def __getitem__(self, key):
         return self.get_order(key)
 
-    def run(self, args, options):
+    def execute(self, args, options):
         """Bad use of command so we print usage
         """
         return self.explanations()
