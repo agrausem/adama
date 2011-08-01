@@ -16,7 +16,7 @@ class QG(object):
     """Base class for the adama library
     """
 
-    arg = ''
+    args = ''
     options = ()
     examples = ''
 
