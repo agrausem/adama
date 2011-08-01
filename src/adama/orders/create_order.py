@@ -7,7 +7,7 @@ import os
 from optparse import make_option
 
 from adama.commandment import BaseOrder, OrderError
-from adama.orders import get_template
+from adama.orders import get_template, add_to_pythonpath
 
 
 class Order(BaseOrder):
@@ -19,7 +19,7 @@ Arguments:
   name      name of the order
     """
 
-    options = ()
+    options = BaseOrder.options + ()
     description = __doc__.split('\n')[0].lower()
     args = "module name"
 
@@ -31,6 +31,10 @@ Arguments:
             raise OrderError('The create_program has 3 required arguments', self.usage())
 
         name = args[2]
+
+        # adds a path to pythonpath if options has been selected
+        # and if it is not already there
+        add_to_pythonpath(options.pythonpath)
 
         try:
             module = __import__(args[1])

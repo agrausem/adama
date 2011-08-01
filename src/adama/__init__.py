@@ -6,16 +6,18 @@
 import sys
 import os
 
-from .commandment import Commander, OrderError
+from .commandment import Commander, OrderError, QG
 
 
-def sir_yes_sir(module='', doc='', argv=None):
+def sir_yes_sir(module='', doc='', options=(), argv=None):
     """
     """
     argv = argv if argv else sys.argv[:]
     command = os.path.basename(argv[0])
     module = module if module else command
     commander = Commander(command, module, doc)
+
+    QG.options = options
 
     no_arg = len(argv) == 1
     needs_help = not no_arg and argv[1] == 'help'

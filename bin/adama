@@ -5,8 +5,15 @@
 """
 
 import sys
+from optparse import make_option
+
 from adama import sir_yes_sir
 
+global_options = (
+    make_option('--pythonpath', action='store', type='string', dest='pythonpath',
+        metavar='PYTHONPATH',
+        help='A directory to add to the Python path, e.g. "/path/to/myproject"'),
+)
 
 if __name__ == '__main__':
-	sys.exit(sir_yes_sir(doc=__doc__))
+	sys.exit(sir_yes_sir(doc=__doc__, options=global_options))

@@ -18,6 +18,7 @@ class QG(object):
 
     arg = ''
     options = ()
+    examples = ''
 
     def __init__(self, command, module):
         self.command = command
@@ -126,10 +127,6 @@ class BaseOrder(QG):
     """The base class of a program that needs an implementation
     to define a command
     """
-
-    args = ''
-    options = ()
-    examples = ""
 
     def __init__(self, command, module):
         super(BaseOrder, self).__init__(command, module)
