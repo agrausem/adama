@@ -87,7 +87,6 @@ class Commander(QG):
                 .format(self.module))
         else:
             if not self.__orders:
-                print package
                 for name in find_orders(package.__path__[0]):
                     subpackage = '{0}.{1}'.format(app_orders, name)
                     if subpackage not in sys.modules:

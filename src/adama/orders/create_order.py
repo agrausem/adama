@@ -6,8 +6,8 @@
 import os
 from optparse import make_option
 
-from adama.commandment import BaseOrder, OrderError
-from adama.orders import get_template, add_to_pythonpath
+from ..commandment import BaseOrder, OrderError
+from . import get_template, get_module, touch
 
 
 class Order(BaseOrder):
@@ -29,16 +29,10 @@ Arguments:
         if len(args) != 3:
             raise OrderError('The create_program has 3 required arguments', self.usage())
 
-        name = args[2]
-
         # adds a path to pythonpath if options has been selected
-        # and if it is not already there
-        add_to_pythonpath(options.pythonpath)
-
-        try:
-            module = __import__(args[1])
-        except ImportError as e:
-            raise OrderError(str(e))
+        # and if it is not already there and returns a module
+        module = get_module(args[1], options.pythonpath)
+        name = args[2]
 
         # Constructs, searches and creates the orders path
         orders_path = os.path.join(module.__path__[0], 'orders')

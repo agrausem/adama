@@ -7,8 +7,8 @@ import sys
 import os
 from optparse import make_option
 
-from adama.commandment import BaseOrder, OrderError
-from adama.orders import get_template
+from ..commandment import BaseOrder, OrderError
+from . import get_module, get_template
 
 class Order(BaseOrder):
     """Creates a command line program for your application that will look for orders
@@ -37,7 +37,7 @@ Argument:
             raise OrderError('The create_program has one required argument',
                 self.usage())
 
-        module = args[1]
+        module = get_module(args[1], options.pythonpath)
 
         # Checks if entered path exists and create it
         if not os.path.isdir(options.path):
@@ -45,7 +45,7 @@ Argument:
 
         # Defines command's name if user doesn't
         if not options.name:
-            options.name = module.split('.')[-1]
+            options.name = module.__name__.split('.')[-1]
 
         # Path to save the command
         file_path = os.path.join(options.path, options.name)
@@ -53,6 +53,6 @@ Argument:
         # Writes data coming from template to file
         with open(file_path, "w") as program:
             template = get_template('program')
-            program.write(template.format(module))
+            program.write(template.format(module.__name__))
 
         return 0
