@@ -3,7 +3,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.2'
+version = '0.3'
 
 # Dynamically calculate the version based on playlister VERSION.
 
