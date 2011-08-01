@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""This script allows you to adding data to the listen file that contains
-all the data for generating playlist
+"""Create Order order
 """
 
 import os
@@ -10,40 +9,49 @@ from optparse import make_option
 from adama.commandment import BaseOrder, OrderError
 from adama.orders import get_template
 
+
 class Order(BaseOrder):
-    """
+    """Creates an order for your application that will be launch with a command
+as a subcommand
+
+Arguments:
+  module    python module that contains or will contain the orders module
+  name      name of the order
     """
 
-    options = BaseOrder.options
-
-    description = __doc__
-    args = "project_path library_name order_name"
+    options = ()
+    description = __doc__.split('\n')[0].lower()
+    args = "module name"
 
     def __init__(self, commander, module):
         super(Order, self).__init__(commander, module)
 
-    def run(self, *args, **options):
-        if len(args) != 4:
-            raise OrderError('The create_program needs three arguments')
+    def run(self, args, options):
+        if len(args) != 3:
+            raise OrderError('The create_program has 3 required arguments', self.usage())
 
-        project_path = args[1]
-        library_name = args[2]
-        order_name = args[3]
+        name = args[2]
 
-        if not os.path.isdir(project_path):
-            raise OrderError(
-                'The project {0} does not exist'.format(project_path)
-            )
+        try:
+            module = __import__(args[1])
+        except ImportError as e:
+            raise OrderError(str(e))
 
-        orders_path = os.path.join(project_path, library_name, 'orders')
+        # Constructs, searches and creates the orders path
+        orders_path = os.path.join(module.__path__[0], 'orders')
         if not os.path.isdir(orders_path):
             os.mkdir(orders_path)
+            # Makes order a python module
+            touch(os.path.join(orders_path, '__init__.py'))
 
-        if not order_name.endswith('.py'):
-            order_name = '{0}.py'.format(order_name)
-        order_path = os.path.join(orders_path, order_name)
+        # Defines the order filename
+        name = name if os.path.splitext(name)[1] == '.py' \
+            else '{0}.py'.format(name)
+        order_path = os.path.join(orders_path, name)
 
+        # Writes in file
         with open(order_path, "w") as order:
+            template = get_template('order')
             order.write(get_template('order'))
 
         return 0

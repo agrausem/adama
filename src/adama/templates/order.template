@@ -3,22 +3,29 @@
 """
 """
 
-from adama.commander import BaseOrder, OrderError
+from optparse import make_option
+
+from adama.commandment import BaseOrder, OrderError
 
 
 class Order(BaseOrder):
     """
     """
 
-    options = BaseOrder.options
+    options = BaseOrder.options + (
         # options for order come here
+        # use make_option
+        # see http://docs.python.org/library/optparse.html#populating-the-parser
+    )
 
-    help = 'help for the order (ex: __doc__)'
-    args = 'args of the order (ex: [options] arg1 arg2'
+    # this constructs a pretty help for the order
+    args = 'args of the order (ex: arg1 arg2)'
+    description = 'help for the order (ex: __doc__)'
+    examples = 'put examples here'
 
     def __init__(self, command, module):
         super(Order, self).__init__(command, module)
 
-    def run(self, *args, **options):
+    def run(self, args, options):
         # the logic of the order comes here
         return 0
