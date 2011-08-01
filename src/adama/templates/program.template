@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+"""
+
 import sys
 from adama import sir_yes_sir
 
 if __name__ == '__main__':
-    sys.exit(sir_yes_sir('{0}'))
+    sys.exit(sir_yes_sir(module='{0}', doc=__doc__))
