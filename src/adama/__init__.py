@@ -17,6 +17,7 @@ def sir_yes_sir(module='', doc='', options=(), argv=None):
     module = module if module else command
     commander = Commander(command, module, doc)
 
+    # global options made available for the orders
     QG.options = options
 
     no_arg = len(argv) == 1
