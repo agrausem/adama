@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import sys
 from setuptools import setup, find_packages
 
-version = '0.3'
+path = '{0}/src'.format(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(path)
 
-# Dynamically calculate the version based on playlister VERSION.
+module = __import__("adama")
+version = module.get_version()
+project = module.__name__
 
 setup(
-    name = "adama",
+    name = project,
     version = version,
-    url = 'http://bitbucket.org/agrausem/adama',
-    download_url = 'http://bitbucket.org/agrausem/adama/files/',
+    url = 'http://bitbucket.org/agrausem/{0}'.format(project),
+    download_url = 'http://bitbucket.org/agrausem/{0}/files/'.format(project),
     author = 'Arnaud Grausem',
     author_email = 'arnaud.grausem@gmail.com',
     description = 'A light library to create command line python script for an application',

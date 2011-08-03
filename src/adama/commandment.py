@@ -2,7 +2,7 @@
 
 import sys
 
-from .utils import find_orders, get_version, AdamaOptionParser
+from .utils import find_orders, AdamaOptionParser
 
 
 class OrderError(Exception):
@@ -19,6 +19,7 @@ class QG(object):
     args = ''
     options = ()
     examples = ''
+    version = ''
 
     def __init__(self, command, module):
         self.command = command
@@ -35,7 +36,7 @@ class QG(object):
         """
         return AdamaOptionParser(prog=self.command, usage=self.usage(),
             description=self.__doc__, option_list=self.options,
-            version=get_version(command=self.command), epilog='')
+            version=self.version, epilog='')
 
     def explanations(self):
         """Help on command

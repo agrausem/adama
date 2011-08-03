@@ -5,9 +5,12 @@
 """
 
 import sys
+import os
 from optparse import make_option
 
-from adama import sir_yes_sir
+from adama import sir_yes_sir, get_version
+
+name = os.path.split(__file__)[1]
 
 global_options = (
     make_option('--pythonpath', action='store', type='string', dest='pythonpath',
@@ -16,4 +19,4 @@ global_options = (
 )
 
 if __name__ == '__main__':
-	sys.exit(sir_yes_sir(doc=__doc__, options=global_options))
+    sys.exit(sir_yes_sir(doc=__doc__, options=global_options, version=get_version(name)))

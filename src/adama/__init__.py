@@ -9,7 +9,14 @@ import os
 from .commandment import Commander, OrderError, QG
 
 
-def sir_yes_sir(module='', doc='', options=(), argv=None):
+VERSION = ('0', '3', '1', 'beta')
+
+def get_version(command=''):
+    version = '.'.join(element for element in VERSION[:3])
+    return '{0} {1}'.format(command, version) if command else version
+
+
+def sir_yes_sir(module='', doc='', options=(), version='', argv=None):
     """
     """
     argv = argv if argv else sys.argv[:]
@@ -17,8 +24,9 @@ def sir_yes_sir(module='', doc='', options=(), argv=None):
     module = module if module else command
     commander = Commander(command, module, doc)
 
-    # global options made available for the orders
+    # global options and app version made available for the orders
     QG.options = options
+    QG.version = version
 
     no_arg = len(argv) == 1
     needs_help = not no_arg and argv[1] == 'help'

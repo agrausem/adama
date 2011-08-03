@@ -22,15 +22,6 @@ class AdamaOptionParser(OptionParser):
         return self.description
 
 
-VERSION = '0.3'
-
-
-def get_version(command=''):
-    if command:
-        return '{0} {1}'.format(command, VERSION)
-    return VERSION
-
-
 def find_orders(path):
     """
     """

@@ -16,4 +16,4 @@ global_options = (
 )
 
 if __name__ == '__main__':
-    sys.exit(sir_yes_sir(module='{0}', doc=__doc__, options=global_options))
+    sys.exit(sir_yes_sir(module='{0}', doc=__doc__, options=global_options, version=''))
