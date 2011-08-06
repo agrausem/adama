@@ -5,7 +5,8 @@
 
 from optparse import make_option
 
-from adama.commandment import BaseOrder, OrderError
+from adama.commandment import BaseOrder
+from adama.exceptions import OrderError
 
 
 class Order(BaseOrder):

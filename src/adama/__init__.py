@@ -6,10 +6,11 @@
 import sys
 import os
 
-from .commandment import Commander, OrderError, QG
+from .commandment import Commander, QG
+from .exceptions import UnknownOrderError
 
 
-VERSION = ('0', '3', '1', 'beta')
+VERSION = ('0', '3', '2', 'beta')
 
 
 def get_version(command=''):
@@ -41,8 +42,8 @@ def sir_yes_sir(module='', doc='', options=(), version='', argv=None):
         order_name = argv[1] if not order_help else argv[2]
         try:
             order = commander[order_name]
-        except KeyError as e:
-            return commander(argv[1:])
+        except UnknownOrderError as e:
+            return e()
         else:
             if order_help:
                 return order.explanations()

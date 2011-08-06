@@ -7,7 +7,8 @@ import sys
 import os
 from optparse import make_option
 
-from ..commandment import BaseOrder, OrderError
+from ..commandment import BaseOrder
+from ..exceptions import OrderError
 from . import get_module, get_template, get_command
 
 class Order(BaseOrder):
@@ -32,8 +33,8 @@ Argument:
 
     def execute(self, *args, **options):
         if len(args) != 1:
-            raise OrderError('The create_program has one required argument',
-                self.usage())
+            raise OrderError('The create_program order has one required argument',
+                self)
 
         module = get_module(args[0], options['pythonpath'])
 

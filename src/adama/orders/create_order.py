@@ -6,7 +6,8 @@
 import os
 from optparse import make_option
 
-from ..commandment import BaseOrder, OrderError
+from ..commandment import BaseOrder
+from ..exceptions import OrderError
 from . import get_template, get_module, get_command, touch
 
 
@@ -28,7 +29,7 @@ Arguments:
 
     def execute(self, *args, **options):
         if len(args) != 2:
-            raise OrderError('The create_program has 2 required arguments', self.usage())
+            raise OrderError('The create_order order has two required arguments', self)
 
         # adds a path to pythonpath if options has been selected
         # and if it is not already there and returns a module

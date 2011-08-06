@@ -3,13 +3,7 @@
 import sys
 
 from .utils import find_orders, AdamaOptionParser
-
-
-class OrderError(Exception):
-    """
-    """
-    pass
-
+from .exceptions import UnknownOrderError, OrderError
 
 
 class QG(object):
@@ -28,7 +22,7 @@ class QG(object):
     def usage(self):
         """Usage of the command
         """
-        return 'Usage: %prog order [options] [args]'
+        return 'Usage: {0} order [options] [args]'.format(self.command)
 
     @property
     def decrypter(self):
@@ -60,10 +54,9 @@ class QG(object):
         options, args = self.decrypt(sysargs)
         try:
             result = self.execute(*args, **options.__dict__)
-        except OrderError, e:
-            sys.stderr.write(str(e))
-            sys.exit(1)
-
+        except OrderError as e:
+            return e()
+        return result
 
 class Commander(QG):
     """Program class
@@ -110,10 +103,28 @@ class Commander(QG):
         epilog = """
 Type '{0} help <order>' for help on a specific order.
 
-Available orders:
-{1}
+{1}{2}
 
 """
+        create_help = "\n\nType 'adama create_order [options] {0} <order_name>' to create one"\
+                .format(self.module)
+        # Formats the epilog
+        decrypter.epilog = epilog.format(
+            self.command, self.available_orders, create_help if not self.__orders else ''
+        )
+
+        return decrypter
+
+    def get_order(self, name):
+        """Gives an order by name
+        """
+        return self.orders[name]
+
+    @property
+    def available_orders(self):
+        """
+        """
+        available = "Available orders:\n{0}"
         if self.orders:
             # Returns the longest line length that will be printed on terminal
             max_ordername_len = max((len(name) for name in self.orders))
@@ -123,22 +134,16 @@ Available orders:
                 for name, order in self.orders.items())
         else:
             # Help output when no orders can be found under package
-            available_orders = """
-No orders available.
-Type 'adama create_order [options] {0} <order_name>' to create one"""\
-                .format(self.module)
-        # Formats the epilog
-        decrypter.epilog = epilog.format(self.command, available_orders)
+            available_orders = "No orders available."
+        return available.format(available_orders)
 
-        return decrypter
-
-    def get_order(self, name):
-        """Gives an order by name
-        """
-        return self.orders[name]
 
     def __getitem__(self, key):
-        return self.get_order(key)
+        try:
+            return self.get_order(key)
+        except KeyError:
+            raise UnknownOrderError('The order "{0}" doesn\'t exist'\
+                .format(key), self)
 
     def execute(self, args, options):
         """Bad use of command so we print usage
@@ -152,16 +157,19 @@ class BaseOrder(QG):
     """
 
     def __init__(self, module, command=''):
-        super(BaseOrder, self).__init__(module, command='')
+        super(BaseOrder, self).__init__(module, command=command)
         self.name = self.__class__.__module__.split('.')[-1] \
 
     def usage(self):
         """Usage of a command
         """
-        return '%prog {0.name} [options] {0.args}'.format(self)
+        return 'Usage: {0.command} {0.name} [options] {0.args}'.format(self)
 
     @property
     def decrypter(self):
         decrypter = super(BaseOrder, self).decrypter
         decrypter.epilog = self.examples
         return decrypter
+
+    def __str__(self):
+        return self.usage()
