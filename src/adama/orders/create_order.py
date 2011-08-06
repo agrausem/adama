@@ -7,7 +7,7 @@ import os
 from optparse import make_option
 
 from ..commandment import BaseOrder, OrderError
-from . import get_template, get_module, touch
+from . import get_template, get_module, get_command, touch
 
 
 class Order(BaseOrder):
@@ -19,11 +19,12 @@ Arguments:
     """
 
     options = BaseOrder.options + ()
+
     description = __doc__.split('\n')[0].lower()
     args = "module name"
 
-    def __init__(self, commander, module):
-        super(Order, self).__init__(commander, module)
+    def __init__(self):
+        super(Order, self).__init__('adama', command='adama')
 
     def execute(self, *args, **options):
         if len(args) != 2:
@@ -41,6 +42,9 @@ Arguments:
             # Makes order a python module
             touch(os.path.join(orders_path, '__init__.py'))
 
+        # Defines the command name
+        command_name = get_command(options['name'], module)
+
         # Defines the order filename
         name = name if os.path.splitext(name)[1] == '.py' \
             else '{0}.py'.format(name)
@@ -48,6 +52,7 @@ Arguments:
 
         # Writes in file
         with open(order_path, "w") as order:
-            order.write(get_template('order'))
+            order.write(get_template('order')\
+                .format(module.__name__, command_name))
 
         return 0

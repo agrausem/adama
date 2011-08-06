@@ -23,8 +23,8 @@ class Order(BaseOrder):
     description = 'help for the order (ex: __doc__)'
     examples = 'put examples here'
 
-    def __init__(self, command, module):
-        super(Order, self).__init__(command, module)
+    def __init__(self):
+        super(Order, self).__init__('{0}', command='{1}')
 
     def execute(self, *args, **options):
         # the logic of the order comes here

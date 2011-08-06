@@ -11,18 +11,20 @@ from .commandment import Commander, OrderError, QG
 
 VERSION = ('0', '3', '1', 'beta')
 
+
 def get_version(command=''):
     version = '.'.join(element for element in VERSION[:3])
     return '{0} {1}'.format(command, version) if command else version
 
 
 def sir_yes_sir(module='', doc='', options=(), version='', argv=None):
-    """
+    """Launches the right order or displaying the help for a command or an order
+    directly from command line.
     """
     argv = argv if argv else sys.argv[:]
     command = os.path.basename(argv[0])
     module = module if module else command
-    commander = Commander(command, module, doc)
+    commander = Commander(module, doc=doc, command=command)
 
     # global options and app version made available for the orders
     QG.options = options
@@ -46,3 +48,11 @@ def sir_yes_sir(module='', doc='', options=(), version='', argv=None):
                 return order.explanations()
             else:
                 return order(argv[2:])
+
+
+def call_order(module_name, order_name, *args, **kwargs):
+    """Calls an order from another python script directly
+    """
+    commander = Commander(module_name)
+    order = commander[order_name]
+    return order.execute(*args, **kwargs)

@@ -21,7 +21,7 @@ class QG(object):
     examples = ''
     version = ''
 
-    def __init__(self, command, module):
+    def __init__(self, module, command=''):
         self.command = command
         self.module = module
 
@@ -71,8 +71,8 @@ class Commander(QG):
 
     __orders = {}
 
-    def __init__(self, command, module, doc):
-        super(Commander, self).__init__(command, module)
+    def __init__(self, module, command='', doc=''):
+        super(Commander, self).__init__(module, command=command)
         self.doc = doc if doc else __doc__
 
     @property
@@ -92,8 +92,7 @@ class Commander(QG):
                     subpackage = '{0}.{1}'.format(app_orders, name)
                     if subpackage not in sys.modules:
                         __import__(subpackage)
-                    self.__orders[name] = sys.modules[subpackage].Order(
-                        self.command, self.module)
+                    self.__orders[name] = sys.modules[subpackage].Order()
 
         return self.__orders
 
@@ -152,8 +151,8 @@ class BaseOrder(QG):
     to define a command
     """
 
-    def __init__(self, command, module):
-        super(BaseOrder, self).__init__(command, module)
+    def __init__(self, module, command=''):
+        super(BaseOrder, self).__init__(module, command='')
         self.name = self.__class__.__module__.split('.')[-1] \
 
     def usage(self):

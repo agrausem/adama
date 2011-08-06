@@ -16,6 +16,8 @@ global_options = (
     make_option('--pythonpath', action='store', type='string', dest='pythonpath',
         metavar='PYTHONPATH',
         help='A directory to add to the Python path, e.g. "/path/to/myproject"'),
+    make_option('-n', '--name', action='store', type='string', dest='name',
+        metavar='NAME', help='name of the command [Default: module\'s name]'),
 )
 
 if __name__ == '__main__':

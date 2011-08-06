@@ -28,6 +28,14 @@ def get_module(module_name, path):
     return module
 
 
+def get_command(name, module):
+    """Defines command's name if user doesn't
+    """
+    if not name:
+        return module.__name__
+    return name
+
+
 def touch(filename, times=None):
     """Creates an empty file
     """
