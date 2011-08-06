@@ -26,6 +26,6 @@ class Order(BaseOrder):
     def __init__(self, command, module):
         super(Order, self).__init__(command, module)
 
-    def execute(self, args, options):
+    def execute(self, *args, **options):
         # the logic of the order comes here
         return 0

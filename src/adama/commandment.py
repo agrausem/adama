@@ -44,22 +44,22 @@ class QG(object):
         self.decrypter.print_help()
         return 1
 
-    def decrypt(self):
+    def decrypt(self, args):
         """Parse command args and options
         """
-        return self.decrypter.parse_args()
+        return self.decrypter.parse_args(args)
 
     def execute(self, *args, **kwargs):
         """The implementation of the command or order comes here
         """
         raise NotImplementedError()
 
-    def __call__(self, args):
+    def __call__(self, sysargs):
         """Executes the command
         """
-        options, args = self.decrypt()
+        options, args = self.decrypt(sysargs)
         try:
-            result = self.execute(args, options)
+            result = self.execute(*args, **options.__dict__)
         except OrderError, e:
             sys.stderr.write(str(e))
             sys.exit(1)

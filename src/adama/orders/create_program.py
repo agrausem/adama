@@ -32,23 +32,23 @@ Argument:
     def __init__(self, commander, module):
         super(Order, self).__init__(commander, module)
 
-    def execute(self, args, options):
-        if len(args) != 2:
+    def execute(self, *args, **options):
+        if len(args) != 1:
             raise OrderError('The create_program has one required argument',
                 self.usage())
 
-        module = get_module(args[1], options.pythonpath)
+        module = get_module(args[0], options['pythonpath'])
 
         # Checks if entered path exists and create it
-        if not os.path.isdir(options.path):
-            os.makedirs(options.path)
+        if not os.path.isdir(options['path']):
+            os.makedirs(options['path'])
 
         # Defines command's name if user doesn't
-        if not options.name:
-            options.name = module.__name__.split('.')[-1]
+        if not options['name']:
+            options['name'] = module.__name__.split('.')[-1]
 
         # Path to save the command
-        file_path = os.path.join(options.path, options.name)
+        file_path = os.path.join(options['path'], options['name'])
 
         # Writes data coming from template to file
         with open(file_path, "w") as program:

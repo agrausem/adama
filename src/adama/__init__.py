@@ -45,4 +45,4 @@ def sir_yes_sir(module='', doc='', options=(), version='', argv=None):
             if order_help:
                 return order.explanations()
             else:
-                return order(argv[1:])
+                return order(argv[2:])

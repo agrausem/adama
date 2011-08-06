@@ -25,14 +25,14 @@ Arguments:
     def __init__(self, commander, module):
         super(Order, self).__init__(commander, module)
 
-    def execute(self, args, options):
-        if len(args) != 3:
-            raise OrderError('The create_program has 3 required arguments', self.usage())
+    def execute(self, *args, **options):
+        if len(args) != 2:
+            raise OrderError('The create_program has 2 required arguments', self.usage())
 
         # adds a path to pythonpath if options has been selected
         # and if it is not already there and returns a module
-        module = get_module(args[1], options.pythonpath)
-        name = args[2]
+        module = get_module(args[0], options['pythonpath'])
+        name = args[1]
 
         # Constructs, searches and creates the orders path
         orders_path = os.path.join(module.__path__[0], 'orders')
