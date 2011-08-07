@@ -36,9 +36,6 @@ class UnknownOrderError(AdamaError):
         return '{0!s}\n\n{0.commander.available_orders}\n'\
             .format(self)
 
-    def __str__(self):
-        return self.message
-
     def __repr__(self):
         return '<UnknownOrderError: {0.commander.command}>'.format(self)
 
