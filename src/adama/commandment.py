@@ -62,25 +62,24 @@ class Commander(QG):
     """Program class
     """
 
-    __orders = {}
 
     def __init__(self, module, command='', doc=''):
         super(Commander, self).__init__(module, command=command)
         self.doc = doc if doc else __doc__
+        self.__orders = {}
 
     @property
     def orders(self):
         """Lists the available orders
         """
-        app_orders = '{0}.orders'.format(self.module)
-        try:
-            package = __import__(app_orders) if app_orders not in sys.modules \
-                else sys.modules[app_orders]
-        except ImportError as e:
-            print('The "orders" module can not be found under the {0} package'\
-                .format(self.module))
-        else:
-            if not self.__orders:
+        if not self.__orders:
+            app_orders = '{0}.orders'.format(self.module)
+            try:
+                package = __import__(app_orders) if app_orders not in sys.modules \
+                    else sys.modules[self.module]
+            except ImportError as e:
+                pass
+            else:
                 for name in find_orders(package.__path__[0]):
                     subpackage = '{0}.{1}'.format(app_orders, name)
                     if subpackage not in sys.modules:
@@ -110,7 +109,7 @@ Type '{0} help <order>' for help on a specific order.
                 .format(self.module)
         # Formats the epilog
         decrypter.epilog = epilog.format(
-            self.command, self.available_orders, create_help if not self.__orders else ''
+            self.command, self.available_orders, create_help if not self.orders else ''
         )
 
         return decrypter
@@ -145,11 +144,6 @@ Type '{0} help <order>' for help on a specific order.
             raise UnknownOrderError('The order "{0}" doesn\'t exist'\
                 .format(key), self)
 
-    def execute(self, args, options):
-        """Bad use of command so we print usage
-        """
-        return self.explanations()
-
 
 class BaseOrder(QG):
     """The base class of a program that needs an implementation
@@ -173,3 +167,6 @@ class BaseOrder(QG):
 
     def __str__(self):
         return self.usage()
+
+    def __repr__(self):
+        return "<Order: {}>".format(self.name)
