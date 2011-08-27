@@ -36,7 +36,10 @@ Argument:
             raise OrderError('The create_program order has one required argument',
                 self)
 
-        module = get_module(args[0], options['pythonpath'])
+        try:
+            module = get_module(args[0], options['pythonpath'])
+        except ImportError as e:
+            raise OrderError(str(e), self)
 
         # Checks if entered path exists and create it
         if not os.path.isdir(options['path']):

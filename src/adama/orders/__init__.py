@@ -21,11 +21,7 @@ def get_module(module_name, path):
     """
     if path and path not in sys.path:
         sys.path.append(path)
-    try:
-        module = __import__(module_name)
-    except ImportError as e:
-        raise OrderError(str(e))
-    return module
+    return __import__(module_name)
 
 
 def get_command(name, module):

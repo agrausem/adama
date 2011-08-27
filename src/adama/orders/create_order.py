@@ -33,7 +33,10 @@ Arguments:
 
         # adds a path to pythonpath if options has been selected
         # and if it is not already there and returns a module
-        module = get_module(args[0], options['pythonpath'])
+        try:
+            module = get_module(args[0], options['pythonpath'])
+        except ImportError as e:
+            raise OrderError(str(e), self)
         name = args[1]
 
         # Constructs, searches and creates the orders path

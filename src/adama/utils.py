@@ -22,12 +22,34 @@ class AdamaOptionParser(OptionParser):
         return self.description
 
 
+def is_package(filename):
+    """ Checks if filename looks like a Python package
+    """
+    return filename.startswith('_')
+
+
+def is_module(name, extension):
+    """ Checks if file looks like a Python module
+    """
+    return not is_package(name + extension) and extension == '.py'
+
+
+def is_file(path, element):
+    """ Checks if an element from directory tree is a file
+    """
+    return os.path.isfile(os.path.join(path, element))
+
+
 def find_orders(path):
     """
     """
-    order_path = os.path.join(path, 'orders')
+    DEFAULT_ORDER_DIRECTORY = 'orders'
+    # returns only python modules name found in orders path
     try:
-        return [order[:-3] for order in os.listdir(order_path)
-            if not order.startswith('_') and order.endswith('.py')]
+        orders_path = os.path.join(path, DEFAULT_ORDER_DIRECTORY)
+        splitted_files = [os.path.splitext(element) for element
+            in os.listdir(orders_path) if is_file(orders_path, element)]
+        return [filename for filename, extension in splitted_files
+            if is_module(filename, extension)]
     except OSError:
         return []

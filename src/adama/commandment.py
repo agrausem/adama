@@ -32,10 +32,11 @@ class QG(object):
             description=self.__doc__, option_list=self.options,
             version=self.version, epilog='')
 
-    def explanations(self):
+    def explanations(self, in_shell=True):
         """Help on command
         """
-        self.decrypter.print_help()
+        if in_shell:
+            self.decrypter.print_help()
         return 1
 
     def decrypt(self, args):

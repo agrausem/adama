@@ -19,8 +19,9 @@ class AdamaError(Exception):
     def __str__(self):
         return self.message
 
-    def __call__(self):
-        print(self.print_error())
+    def __call__(self, in_shell=True):
+        if in_shell:
+            print(self.print_error())
         return self.number
 
 
