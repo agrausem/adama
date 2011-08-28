@@ -1,13 +1,18 @@
 # -*- coding: utf-8
 
+"""
+adama.orders
+============
+
+    Helper functions for adama defined orders
+"""
+
 import os
 import sys
 
-from ..commandment import OrderError
-
 
 def get_template(name):
-    """
+    """Gets a template based on name of order
     """
     template_path = os.path.join(
         os.path.dirname(__path__[0]), 'templates', '{0}.template'.format(name)

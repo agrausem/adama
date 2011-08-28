@@ -3,16 +3,16 @@
 """Create Program Order
 """
 
-import sys
 import os
 from optparse import make_option
 
-from ..commandment import BaseOrder
 from ..exceptions import OrderError
+from ..commandment import BaseOrder
 from . import get_module, get_template, get_command
 
 class Order(BaseOrder):
-    """Creates a command line program for your application that will look for orders
+    """Creates a command line program for your application that will look for
+orders
 
 Argument:
   module      Python module that contains or will contain the orders module
@@ -33,13 +33,13 @@ Argument:
 
     def execute(self, *args, **options):
         if len(args) != 1:
-            raise OrderError('The create_program order has one required argument',
-                self)
+            raise OrderError(
+                'The create_program order has one required argument', self)
 
         try:
             module = get_module(args[0], options['pythonpath'])
-        except ImportError as e:
-            raise OrderError(str(e), self)
+        except ImportError as bad_import:
+            raise OrderError(str(bad_import), self)
 
         # Checks if entered path exists and create it
         if not os.path.isdir(options['path']):

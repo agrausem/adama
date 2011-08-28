@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""Adama's exceptions declaration
+"""
+adama.exception
+===============
+
+    Exceptions based on a abstract base exception class to catch missing
+    orders or errors during execution of orders
 """
 
 
@@ -9,6 +14,7 @@ class AdamaError(Exception):
     """
 
     def __init__(self, msg, number=1):
+        super(AdamaError, self).__init__()
         self.message = msg
         self.number = number
 
@@ -26,7 +32,7 @@ class AdamaError(Exception):
 
 
 class UnknownOrderError(AdamaError):
-    """
+    """An order called doesn't exist
     """
 
     def __init__(self, msg, commander):
@@ -42,7 +48,7 @@ class UnknownOrderError(AdamaError):
 
 
 class OrderError(AdamaError):
-    """
+    """An error during the excecution of an order
     """
 
     def __init__(self, msg, order):

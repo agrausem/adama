@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
+adama
+=====
+
+Defines the base logic of the library to launch orders from command line or
+directly in Python scripts
 """
 
 import sys
@@ -14,6 +19,8 @@ VERSION = ('0', '3', '2', 'beta')
 
 
 def get_version(command=''):
+    """Human readable version
+    """
     version = '.'.join(element for element in VERSION[:3])
     return '{0} {1}'.format(command, version) if command else version
 

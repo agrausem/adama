@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+"""
+adama.commandment
+=================
+
+    Core API which contains base classes for commands and orders
+"""
+
 import sys
 
 from .utils import find_orders, AdamaOptionParser
@@ -55,14 +62,13 @@ class QG(object):
         options, args = self.decrypt(sysargs)
         try:
             result = self.execute(*args, **options.__dict__)
-        except OrderError as e:
-            return e()
+        except OrderError as order_error:
+            result = order_error()
         return result
 
 class Commander(QG):
     """Program class
     """
-
 
     def __init__(self, module, command='', doc=''):
         super(Commander, self).__init__(module, command=command)
@@ -76,9 +82,10 @@ class Commander(QG):
         if not self.__orders:
             app_orders = '{0}.orders'.format(self.module)
             try:
-                package = __import__(app_orders) if app_orders not in sys.modules \
+                package = __import__(app_orders) \
+                if app_orders not in sys.modules \
                     else sys.modules[self.module]
-            except ImportError as e:
+            except ImportError:
                 pass
             else:
                 for name in find_orders(package.__path__[0]):
@@ -106,11 +113,12 @@ Type '{0} help <order>' for help on a specific order.
 {1}{2}
 
 """
-        create_help = "\n\nType 'adama create_order [options] {0} <order_name>' to create one"\
-                .format(self.module)
+        create_help = "\n\nType 'adama create_order [options] {0} <order_name>'\
+ to create one".format(self.module)
         # Formats the epilog
         decrypter.epilog = epilog.format(
-            self.command, self.available_orders, create_help if not self.orders else ''
+            self.command, self.available_orders,
+            create_help if not self.orders else ''
         )
 
         return decrypter
@@ -122,7 +130,7 @@ Type '{0} help <order>' for help on a specific order.
 
     @property
     def available_orders(self):
-        """
+        """Human readable string to show available orders for a command
         """
         available = "Available orders:\n{0}"
         if self.orders:
@@ -130,13 +138,17 @@ Type '{0} help <order>' for help on a specific order.
             max_ordername_len = max((len(name) for name in self.orders))
             # Pretty output of available orders
             available_orders = '\n'.join(
-                '  {0:{2}}\t{1}'.format(name, order.description, max_ordername_len)
-                for name, order in self.orders.items())
+                '  {0:{2}}\t{1}'.format(
+                    name, order.description, max_ordername_len
+                ) for name, order in self.orders.items())
         else:
             # Help output when no orders can be found under package
             available_orders = "No orders available."
         return available.format(available_orders)
 
+
+    def execute(self):
+        return self.usage()
 
     def __getitem__(self, key):
         try:
@@ -165,6 +177,9 @@ class BaseOrder(QG):
         decrypter = super(BaseOrder, self).decrypter
         decrypter.epilog = self.examples
         return decrypter
+
+    def execute(self, *args, **kwargs):
+        raise NotImplementedError
 
     def __str__(self):
         return self.usage()

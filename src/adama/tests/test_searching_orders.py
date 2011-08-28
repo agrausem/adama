@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-"""Test getting orders
+"""
+adama.tests.test_searching_orders
+=================================
+
+    Test finding and getting orders from filesystem ans sys.path
 """
 
 import unittest
-import sys
 import os
 import shutil
 
@@ -20,30 +23,39 @@ class TestFileUtils(unittest.TestCase):
     """
 
     def test_is_a_package(self):
+        """Tests if a file defines a python package
+        """
         my_package = '__init__.py'
         self.assertTrue(is_package(my_package))
 
     def test_is_not_a_package(self):
+        """Tests if a file doesn't define a python package
+        """
         my_module = 'my_module.py'
         self.assertFalse(is_package(my_module))
 
     def test_is_a_module(self):
-        my_module = ('module', '.py')
-        self.assertTrue(is_module(*my_module))
+        """Tests if a file is a python module
+        """
+        self.assertTrue(is_module('module', '.py'))
 
     def test_is_not_a_module(self):
-        my_file = ('file', '.txt')
-        self.assertFalse(is_module(*my_file))
-        my_package = ('__init__', '.py')
-        self.assertFalse(is_module(*my_package))
+        """Tests of a file is not a python module
+        """
+        self.assertFalse(is_module('file', '.txt'))
+        self.assertFalse(is_module('__init__', '.py'))
 
     def test_is_a_file(self):
+        """Tests if element on filesystem is a file
+        """
         with open('/tmp/my_module.py', 'w') as module:
             module.write('I\'m a Python module')
         self.assertTrue(is_file('/tmp', 'my_module.py'))
         os.remove('/tmp/my_module.py')
 
     def test_is_not_a_file(self):
+        """Tests if an element on filesystem is not a file
+        """
         self.assertFalse(is_file('/tmp', 'my_other_module.py'))
         os.mkdir('/tmp/my_directory')
         self.assertFalse(is_file('/tmp', 'my_directory'))
@@ -105,14 +117,18 @@ class TestGetOrders(TestBaseOrders):
         assert repr(self.commander['clear']) == '<Order: clear>'
 
     def test_get_not_existing_order(self):
-        """
+        """Test if an error is raised when trying to get an order that doesn't
+        exist
         """
         with self.assertRaises(UnknownOrderError) as error:
             clear = self.commander['clear']
+            clear()
         the_error = error.exception
         self.assertEqual(the_error.number, 11)
-        self.assertRegexpMatches(str(the_error), 'The order "clear" doesn\'t exist')
-        self.assertEqual(repr(the_error), '<UnknownOrderError: {0}>'.format(self.command))
+        self.assertRegexpMatches(str(the_error),
+            'The order "clear" doesn\'t exist')
+        self.assertEqual(repr(the_error), '<UnknownOrderError: {0}>'\
+            .format(self.command))
 
 
 class TestNoOrderPackage(TestBaseOrders):
@@ -128,7 +144,9 @@ class TestNoOrderPackage(TestBaseOrders):
         self._remove_from_syspath()
         super(TestNoOrderPackage, self).tearDown()
 
-    def runTest(self):
+    def test_no_order_package(self):
+        """No order package is already created
+        """
         commander = Commander(self.module)
         self.assertTrue(not commander.orders)
 

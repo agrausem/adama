@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Test getting orders
+"""
+adama.tests
+===========
+
+    Unit tests for the adama library.
 """
 
 import unittest
@@ -63,14 +67,15 @@ class TestBaseOrders(unittest.TestCase):
         sys.path.remove(os.path.dirname(self.base_path))
 
 
-def no_shell_printing(f):
+def no_shell_printing(func):
     """No shell printing for help when lauching tests
     """
     print_functions = (QG.explanations, AdamaError.__call__)
     def wrap(**kwargs):
+        """Wrapper for the printing function"""
         for function in print_functions:
             function.im_func.func_defaults = (False, )
-        result = f(**kwargs)
+        result = func(**kwargs)
         for function in print_functions:
             function.im_func.func_defaults = (True, )
         return result
@@ -81,11 +86,14 @@ def encapsulate_test_with_syspath(*orders):
     """Creates orders, adds path to sys path before launching test
     and removes path and modules
     """
-    def wrap(f):
+    def wrap(func):
+        """Wrapper for calling a function in a package that needs to be in
+        sys.path"""
         def wrapped_f(instance, *args, **kwargs):
+            """Adding in sys.path, launching func and remove from sys.path"""
             instance._create_orders(*orders)
             instance._add_to_syspath()
-            f(instance, *args, **kwargs)
+            func(instance, *args, **kwargs)
             instance._remove_from_syspath()
         return wrapped_f
     return wrap

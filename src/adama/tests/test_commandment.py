@@ -1,10 +1,13 @@
 # -*- coding utf-8 -*-
 
 """
+adama.tests.test_commandment
+============================
+
+    Testing the commandment API
 """
 
 import unittest
-import sys
 
 from adama.tests import TestBaseOrders
 from adama.commandment import Commander
@@ -23,10 +26,15 @@ class TestCommander(TestBaseOrders):
         super(TestCommander, self).tearDown()
 
     def test_usage(self):
-        assert self.commander.usage() == 'Usage: {0} order [options] [args]'.format(self.command)
+        """Tests the usage of a command
+        """
+        assert self.commander.usage() == 'Usage: {0} order [options] [args]'\
+            .format(self.command)
 
     def test_run_not_implemented(self):
-        self.assertRaises(NotImplementedError, self.commander, [])
+        """Tests implemented the execute method on commander
+        """
+        assert self.commander([]) == self.commander.usage()
 
 if __name__ == '__main__':
     unittest.main()

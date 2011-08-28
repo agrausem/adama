@@ -4,15 +4,15 @@
 """
 
 import os
-from optparse import make_option
 
-from ..commandment import BaseOrder
 from ..exceptions import OrderError
+from ..commandment import BaseOrder
 from . import get_template, get_module, get_command, touch
 
 
 class Order(BaseOrder):
-    """Creates an order for your application that will be launch with a command as a subcommand
+    """Creates an order for your application that will be launch with a command
+as a subcommand
 
 Arguments:
   module    python module that contains or will contain the orders module
@@ -29,14 +29,15 @@ Arguments:
 
     def execute(self, *args, **options):
         if len(args) != 2:
-            raise OrderError('The create_order order has two required arguments', self)
+            raise OrderError(
+                'The create_order order has two required arguments', self)
 
         # adds a path to pythonpath if options has been selected
         # and if it is not already there and returns a module
         try:
             module = get_module(args[0], options['pythonpath'])
-        except ImportError as e:
-            raise OrderError(str(e), self)
+        except ImportError as bad_import:
+            raise OrderError(str(bad_import), self)
         name = args[1]
 
         # Constructs, searches and creates the orders path

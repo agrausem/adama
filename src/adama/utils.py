@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""Some utils functions and classes
+"""
+adama.utils
+===========
+
+    The adama option parser that inherits OptionParser and utils function
+    to check python package module and package and to find orders on filesystem
 """
 
 import os
@@ -41,12 +46,12 @@ def is_file(path, element):
 
 
 def find_orders(path):
+    """Finds orders in filesystem given a path
     """
-    """
-    DEFAULT_ORDER_DIRECTORY = 'orders'
+    default_order_directory = 'orders'
     # returns only python modules name found in orders path
     try:
-        orders_path = os.path.join(path, DEFAULT_ORDER_DIRECTORY)
+        orders_path = os.path.join(path, default_order_directory)
         splitted_files = [os.path.splitext(element) for element
             in os.listdir(orders_path) if is_file(orders_path, element)]
         return [filename for filename, extension in splitted_files
