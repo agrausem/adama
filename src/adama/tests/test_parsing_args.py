@@ -26,7 +26,6 @@ class TestShellHelp(TestBaseOrders):
     """Tests the help message and the way they are displayed
     """
 
-
     def test_no_args(self):
         """No argument shell return
         """
@@ -68,7 +67,8 @@ class TestShellExcuteOrder(TestBaseOrders):
     def test_order_execution(self):
         """Order executed shell return
         """
-        assert _sir_yes_sir(module=self.module, argv=[self.command, 'add']) == 0
+        assert _sir_yes_sir(module=self.module, argv=[self.command, 'add']) \
+            == 0
 
 
 class TestDirectLaunchOrder(TestBaseOrders):

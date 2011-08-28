@@ -66,6 +66,7 @@ class QG(object):
             result = order_error()
         return result
 
+
 class Commander(QG):
     """Program class
     """
@@ -113,7 +114,7 @@ Type '{0} help <order>' for help on a specific order.
 {1}{2}
 
 """
-        create_help = "\n\nType 'adama create_order [options] {0} <order_name>'\
+        create_help = "\n\nType 'adama create_order [options] {0} <order_name>\
  to create one".format(self.module)
         # Formats the epilog
         decrypter.epilog = epilog.format(
@@ -146,7 +147,6 @@ Type '{0} help <order>' for help on a specific order.
             available_orders = "No orders available."
         return available.format(available_orders)
 
-
     def execute(self):
         return self.usage()
 
@@ -165,7 +165,7 @@ class BaseOrder(QG):
 
     def __init__(self, module, command=''):
         super(BaseOrder, self).__init__(module, command=command)
-        self.name = self.__class__.__module__.split('.')[-1] \
+        self.name = self.__class__.__module__.split('.')[-1]
 
     def usage(self):
         """Usage of a command

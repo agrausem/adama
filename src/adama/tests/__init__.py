@@ -71,6 +71,7 @@ def no_shell_printing(func):
     """No shell printing for help when lauching tests
     """
     print_functions = (QG.explanations, AdamaError.__call__)
+
     def wrap(**kwargs):
         """Wrapper for the printing function"""
         for function in print_functions:
@@ -79,6 +80,7 @@ def no_shell_printing(func):
         for function in print_functions:
             function.im_func.func_defaults = (True, )
         return result
+
     return wrap
 
 

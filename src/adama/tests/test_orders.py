@@ -39,8 +39,8 @@ class TestCreateProgram(TestBaseOrders):
         with self.assertRaises(OrderError) as order_error:
             call_order('adama', 'create_program')
         exception = order_error.exception
-        assert exception.message == 'The create_program order has one required \
-argument'
+        assert exception.message == 'The create_program order has one required\
+ argument'
 
     def test_command_name(self):
         """Tests creating a command with a name defined

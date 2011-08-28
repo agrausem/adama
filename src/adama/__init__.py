@@ -26,8 +26,8 @@ def get_version(command=''):
 
 
 def sir_yes_sir(module='', doc='', options=(), version='', argv=None):
-    """Launches the right order or displaying the help for a command or an order
-    directly from command line.
+    """Launches the right order or displaying the help for a command or an
+    order directly from command line.
     """
     argv = argv if argv is not None else sys.argv[:]
     command = os.path.basename(argv[0])
@@ -56,6 +56,7 @@ def sir_yes_sir(module='', doc='', options=(), version='', argv=None):
                 return order.explanations()
             else:
                 return order(argv[2:])
+
 
 def call_order(module_name, order_name, *args, **kwargs):
     """Calls an order from another python script directly

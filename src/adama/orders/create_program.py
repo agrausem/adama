@@ -10,6 +10,7 @@ from ..exceptions import OrderError
 from ..commandment import BaseOrder
 from . import get_module, get_template, get_command
 
+
 class Order(BaseOrder):
     """Creates a command line program for your application that will look for
 orders
